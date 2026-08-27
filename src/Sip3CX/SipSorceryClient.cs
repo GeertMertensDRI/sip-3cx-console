@@ -2,7 +2,8 @@ using System.Collections.Concurrent;
 using Sip3CX.Abstractions;
 using SIPSorcery.SIP;
 using SIPSorcery.SIP.App;
-using SIPSorcery.Media;
+using SIPSorceryMedia.Abstractions;
+using SIPSorceryMedia.Encoders;
 using Microsoft.Extensions.Logging;
 
 namespace Sip3CX;
@@ -96,22 +97,24 @@ public sealed class SipSorceryClient : ISipClient
 
         var ua = new SIPUserAgent(_transport!, null);
 
-        // Use RtpAVSession for audio (microphone/speaker on this machine)
-        var session = new RtpAVSession(
-            new AudioOptions { AudioSource = AudioSourcesEnum.Microphone },
-            null);
+        // VoIPMediaSession uses the machine's default microphone & speaker via NAudio/FFmpeg
+        // This replaces the removed RtpAVSession from the core SIPSorcery package
+        var session = new VoIPMediaSession();
+        session.AcceptRtpFromAny = true;
 
         var callDescriptor = new SIPCallDescriptor(
+            username:      null,
+            password:      null,
+            uri:           target,
+            from:          null,
+            to:            null,
+            routeSet:      null,
             customHeaders: null,
-            uri: target,
-            content: null,
-            contentType: null,
-            callId: null,
-            from: null,
-            to: null,
-            contact: null,
-            callReason: SIPCallReasonEnum.Normal,
-            rtpMediaSession: session);
+            authUsername:  null,
+            callDirection: SIPCallDirection.Out,
+            contentType:   SDP.SDP_MIME_CONTENTTYPE,
+            content:       null,
+            callReason:    SIPCallReasonEnum.Normal);
 
         bool callResult = await ua.Call(callDescriptor, session);
 
@@ -122,6 +125,8 @@ public sealed class SipSorceryClient : ISipClient
 
         if (callResult)
         {
+            // Start audio — pipes microphone → RTP and RTP → speaker
+            await session.Start();
             sipCall.MarkConnected();
             _logger.LogInformation("Call connected. CallId={CallId}", callId);
         }
@@ -132,9 +137,7 @@ public sealed class SipSorceryClient : ISipClient
         }
 
         _calls[callId] = sipCall;
-
-        CallStateChanged?.Invoke(this,
-            new(callId, sipCall.State, target));
+        CallStateChanged?.Invoke(this, new(callId, sipCall.State, target));
 
         return sipCall;
     }
@@ -142,7 +145,7 @@ public sealed class SipSorceryClient : ISipClient
     public Task AcceptCallAsync(string callId, CancellationToken ct = default)
     {
         _logger.LogInformation("Accepting call {CallId}", callId);
-        // Acceptance logic via SIPUserAgent.Answer() would go here
+        // Full answer flow: ua.Answer(uas, session) — extend as needed
         return Task.CompletedTask;
     }
 
