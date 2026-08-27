@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using Sip3CX.Abstractions;
 using SIPSorcery.SIP;
 using SIPSorcery.SIP.App;
-using SIPSorceryMedia.Abstractions;
 using SIPSorceryMedia.Encoders;
 using Microsoft.Extensions.Logging;
 
@@ -36,11 +35,9 @@ public sealed class SipSorceryClient : ISipClient
 
         _transport = new SIPTransport();
 
-        // 3CX typically listens on UDP 5060
         _transport.AddSIPChannel(new SIPUDPChannel(
             new System.Net.IPEndPoint(System.Net.IPAddress.Any, 0)));
 
-        // Create a user agent for incoming calls
         _userAgent = new SIPUserAgent(_transport, null);
         _userAgent.OnIncomingCall += (ua, req) =>
         {
@@ -50,7 +47,6 @@ public sealed class SipSorceryClient : ISipClient
             IncomingCall?.Invoke(this, new IncomingCallEventArgs(callId, caller));
         };
 
-        // Registration agent — 3CX uses standard SIP registration
         _regAgent = new SIPRegistrationUserAgent(
             _transport,
             credentials.Username,
@@ -97,24 +93,26 @@ public sealed class SipSorceryClient : ISipClient
 
         var ua = new SIPUserAgent(_transport!, null);
 
-        // VoIPMediaSession uses the machine's default microphone & speaker via NAudio/FFmpeg
-        // This replaces the removed RtpAVSession from the core SIPSorcery package
+        // VoIPMediaSession handles microphone capture + speaker playback via NAudio/FFmpeg
         var session = new VoIPMediaSession();
         session.AcceptRtpFromAny = true;
 
+        // SIPCallDescriptor(username, password, uri, from, to, routeSet,
+        //                   customHeaders, authUsername, callDirection,
+        //                   contentType, content, mangleIpAddress)
         var callDescriptor = new SIPCallDescriptor(
-            username:      null,
-            password:      null,
-            uri:           target,
-            from:          null,
-            to:            null,
-            routeSet:      null,
-            customHeaders: null,
-            authUsername:  null,
-            callDirection: SIPCallDirection.Out,
-            contentType:   SDP.SDP_MIME_CONTENTTYPE,
-            content:       null,
-            callReason:    SIPCallReasonEnum.Normal);
+            username:       null,
+            password:       null,
+            uri:            target,
+            from:           null,
+            to:             null,
+            routeSet:       null,
+            customHeaders:  null,
+            authUsername:   null,
+            callDirection:  SIPCallDirection.Out,
+            contentType:    SDP.SDP_MIME_CONTENTTYPE,
+            content:        null,
+            mangleIpAddress: false);
 
         bool callResult = await ua.Call(callDescriptor, session);
 
@@ -125,7 +123,6 @@ public sealed class SipSorceryClient : ISipClient
 
         if (callResult)
         {
-            // Start audio — pipes microphone → RTP and RTP → speaker
             await session.Start();
             sipCall.MarkConnected();
             _logger.LogInformation("Call connected. CallId={CallId}", callId);
@@ -145,7 +142,6 @@ public sealed class SipSorceryClient : ISipClient
     public Task AcceptCallAsync(string callId, CancellationToken ct = default)
     {
         _logger.LogInformation("Accepting call {CallId}", callId);
-        // Full answer flow: ua.Answer(uas, session) — extend as needed
         return Task.CompletedTask;
     }
 
