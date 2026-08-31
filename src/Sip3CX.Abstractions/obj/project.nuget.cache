@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Lj4kDyWebZ8=",
+  "success": true,
+  "projectFilePath": "/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/Sip3CX.Abstractions.csproj",
+  "expectedPackageFiles": [
+    "/tmp/codeql-scratch-2417c1c69e93ba4c/dbs/csharp/working/packages/microsoft.netcore.app.ref/10.0.11/microsoft.netcore.app.ref.10.0.11.nupkg.sha512",
+    "/tmp/codeql-scratch-2417c1c69e93ba4c/dbs/csharp/working/packages/microsoft.aspnetcore.app.ref/10.0.11/microsoft.aspnetcore.app.ref.10.0.11.nupkg.sha512"
+  ],
+  "logs": []
+}

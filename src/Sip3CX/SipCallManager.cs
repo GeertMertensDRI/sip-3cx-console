@@ -20,13 +20,13 @@ public sealed class SipCallManager : ISipCallManager
         _client.CallStateChanged += OnCallStateChanged;
     }
 
-    public async Task<ISipCall> DialAsync(string target, CancellationToken ct = default)
+    public async Task<SipCallResult> DialAsync(string target, string browserSdpOffer, CancellationToken ct = default)
     {
         _logger.LogInformation("Dialling {Target}", target);
-        var call = await _client.PlaceCallAsync(target, ct);
-        _calls[call.CallId] = call;
+        var result = await _client.PlaceCallAsync(target, browserSdpOffer, ct);
+        _calls[result.Call.CallId] = result.Call;
         CallsChanged?.Invoke(this, EventArgs.Empty);
-        return call;
+        return result;
     }
 
     public async Task HangUpAsync(string callId, CancellationToken ct = default)

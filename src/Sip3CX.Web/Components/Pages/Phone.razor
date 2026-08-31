@@ -1,0 +1,113 @@
+@page "/phone"
+@rendermode InteractiveServer
+@using Sip3CX.Abstractions
+@inject ISipClient SipClient
+@inject ISipCallManager CallManager
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>SIP Phone</PageTitle>
+
+<h2>3CX SIP Phone</h2>
+
+<p>Status: <strong>@SipClient.State</strong></p>
+
+<div>
+    <input @bind="_target" placeholder="sip:101@pbx.example.com" style="width:300px" />
+    <button @onclick="Dial"
+            disabled="@(_isBusy || SipClient.State != SipClientState.Registered)">
+        📞 Call
+    </button>
+</div>
+
+@if (_activeCall != null)
+{
+    <div style="margin-top:1rem">
+        <strong>Active call:</strong> @_activeCall.RemoteParty — @_activeCall.State
+        &nbsp;
+        <button @onclick="HangUp">🔴 Hang up</button>
+        <button @onclick="Hold"   disabled="@(_activeCall.State != SipCallState.Connected)">⏸ Hold</button>
+        <button @onclick="Resume" disabled="@(_activeCall.State != SipCallState.OnHold)">▶ Resume</button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <p style="color:red">@_errorMessage</p>
+}
+
+@code {
+    private string _target = "";
+    private ISipCall? _activeCall;
+    private bool _isBusy;
+    private string _errorMessage = "";
+
+    protected override void OnInitialized()
+    {
+        SipClient.CallStateChanged += OnCallStateChanged;
+    }
+
+    private async Task Dial()
+    {
+        _errorMessage = "";
+        _isBusy = true;
+        try
+        {
+            // 1. Get browser's WebRTC SDP offer (captures mic, sets up peer connection)
+            var browserSdp = await JS.InvokeAsync<string>("SipAudio.createOffer");
+
+            // 2. Place SIP call via server, exchanging SDP with 3CX
+            var result = await CallManager.DialAsync(_target, browserSdp);
+            _activeCall = result.Call;
+
+            // 3. Give the browser 3CX's SDP answer so audio can flow
+            await JS.InvokeVoidAsync("SipAudio.applyAnswer", result.RemoteSdp);
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Call failed: {ex.Message}";
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private async Task HangUp()
+    {
+        if (_activeCall != null)
+        {
+            await CallManager.HangUpAsync(_activeCall.CallId);
+            await JS.InvokeVoidAsync("SipAudio.hangUp");
+            _activeCall = null;
+        }
+    }
+
+    private async Task Hold()
+    {
+        if (_activeCall != null) await _activeCall.HoldAsync();
+    }
+
+    private async Task Resume()
+    {
+        if (_activeCall != null) await _activeCall.ResumeAsync();
+    }
+
+    private void OnCallStateChanged(object? sender, CallStateChangedEventArgs e)
+    {
+        if (e.State is SipCallState.Ended or SipCallState.Failed)
+        {
+            _activeCall = null;
+            InvokeAsync(StateHasChanged);
+        }
+        else
+        {
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        SipClient.CallStateChanged -= OnCallStateChanged;
+    }
+}

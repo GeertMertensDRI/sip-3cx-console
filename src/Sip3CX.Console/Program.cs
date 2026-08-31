@@ -12,7 +12,7 @@ var config = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
-var settings = config.GetSection("Sip").Get<SipSettings>()
+var settings = config.GetSection("Sip").Get<Sip3CX.ConsoleApp.SipSettings>()
                ?? throw new InvalidOperationException("Missing 'Sip' config section.");
 
 var transport = Enum.Parse<SipTransport>(settings.Transport, ignoreCase: true);
@@ -22,7 +22,7 @@ var services = new ServiceCollection()
     .AddLogging(b => b
         .AddConsole()
         .SetMinimumLevel(LogLevel.Information))
-    .AddSip3CxServices(transport)
+    .AddSip3CxServices()
     .BuildServiceProvider();
 
 var logger      = services.GetRequiredService<ILogger<Program>>();
@@ -153,8 +153,11 @@ async Task Dial(string target)
 {
     try
     {
-        var call = await callManager.DialAsync(target);
-        Console.WriteLine($"Call started. CallId={call.CallId}  State={call.State}");
+        // NOTE: The console app is a non-browser client and cannot perform a WebRTC handshake.
+        // Passing an empty SDP offer means no media description is sent to 3CX.
+        // For real calls from the console, provide a valid SDP offer (e.g. from a local RTP session).
+        var result = await callManager.DialAsync(target, string.Empty);
+        Console.WriteLine($"Call started. CallId={result.Call.CallId}  State={result.Call.State}");
     }
     catch (Exception ex)
     {
