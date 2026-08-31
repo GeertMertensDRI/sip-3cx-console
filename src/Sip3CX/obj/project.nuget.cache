@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "dgSpecHash": "eh9Lz2ChStM=",
+  "success": true,
+  "projectFilePath": "/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX/Sip3CX.csproj",
+  "expectedPackageFiles": [
+    "/home/runner/.nuget/packages/dnsclient/1.7.0/dnsclient.1.7.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.configuration.abstractions/10.0.0/microsoft.extensions.configuration.abstractions.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.0/microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.diagnostics.abstractions/10.0.0/microsoft.extensions.diagnostics.abstractions.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.fileproviders.abstractions/10.0.0/microsoft.extensions.fileproviders.abstractions.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.hosting.abstractions/10.0.0/microsoft.extensions.hosting.abstractions.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.logging.abstractions/10.0.0/microsoft.extensions.logging.abstractions.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.options/10.0.0/microsoft.extensions.options.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.extensions.primitives/10.0.0/microsoft.extensions.primitives.10.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/portable.bouncycastle/1.9.0/portable.bouncycastle.1.9.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/sipsorcery/6.2.4/sipsorcery.6.2.4.nupkg.sha512",
+    "/home/runner/.nuget/packages/sipsorcery.websocketsharp/0.0.1/sipsorcery.websocketsharp.0.0.1.nupkg.sha512",
+    "/home/runner/.nuget/packages/sipsorcerymedia.abstractions/1.2.1/sipsorcerymedia.abstractions.1.2.1.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'SIPSorcery' 6.2.4 has a known high severity vulnerability, https://github.com/advisories/GHSA-28gm-jrmw-xx93",
+      "projectPath": "/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX/Sip3CX.csproj",
+      "warningLevel": 1,
+      "filePath": "/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX/Sip3CX.csproj",
+      "libraryId": "SIPSorcery",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'SIPSorcery' 6.2.4 has a known high severity vulnerability, https://github.com/advisories/GHSA-jwjp-4649-v8jp",
+      "projectPath": "/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX/Sip3CX.csproj",
+      "warningLevel": 1,
+      "filePath": "/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX/Sip3CX.csproj",
+      "libraryId": "SIPSorcery",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}

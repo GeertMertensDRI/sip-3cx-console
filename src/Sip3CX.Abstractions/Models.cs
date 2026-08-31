@@ -1,5 +1,7 @@
 namespace Sip3CX.Abstractions;
 
+public record SipCallResult(ISipCall Call, string RemoteSdp);
+
 public record SipCredentials(
     string Username,
     string Password,

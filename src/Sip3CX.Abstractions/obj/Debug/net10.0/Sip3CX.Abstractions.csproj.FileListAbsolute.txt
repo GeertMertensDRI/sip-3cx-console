@@ -1,0 +1,11 @@
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/bin/Debug/net10.0/Sip3CX.Abstractions.deps.json
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/bin/Debug/net10.0/Sip3CX.Abstractions.dll
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/bin/Debug/net10.0/Sip3CX.Abstractions.pdb
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/Sip3CX.Abstractions.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/Sip3CX.Abstractions.AssemblyInfoInputs.cache
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/Sip3CX.Abstractions.AssemblyInfo.cs
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/Sip3CX.Abstractions.csproj.CoreCompileInputs.cache
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/Sip3CX.Abstractions.dll
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/refint/Sip3CX.Abstractions.dll
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/Sip3CX.Abstractions.pdb
+/home/runner/work/sip-3cx-console/sip-3cx-console/src/Sip3CX.Abstractions/obj/Debug/net10.0/ref/Sip3CX.Abstractions.dll

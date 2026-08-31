@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using Sip3CX.Abstractions;
 using SIPSorcery.SIP;
 using SIPSorcery.SIP.App;
-using SIPSorceryMedia.Encoders;
 using Microsoft.Extensions.Logging;
 
 namespace Sip3CX;
@@ -84,7 +83,8 @@ public sealed class SipSorceryClient : ISipClient
         return Task.CompletedTask;
     }
 
-    public async Task<ISipCall> PlaceCallAsync(string target, CancellationToken ct = default)
+    public async Task<SipCallResult> PlaceCallAsync(
+        string target, string browserSdpOffer, CancellationToken ct = default)
     {
         if (State != SipClientState.Registered)
             throw new InvalidOperationException("Not registered to the SIP server.");
@@ -93,37 +93,35 @@ public sealed class SipSorceryClient : ISipClient
 
         var ua = new SIPUserAgent(_transport!, null);
 
-        // VoIPMediaSession handles microphone capture + speaker playback via NAudio/FFmpeg
-        var session = new VoIPMediaSession();
-        session.AcceptRtpFromAny = true;
-
-        // SIPCallDescriptor(username, password, uri, from, to, routeSet,
-        //                   customHeaders, authUsername, callDirection,
-        //                   contentType, content, mangleIpAddress)
+        // Pass the browser's WebRTC SDP offer as the SIP INVITE body.
+        // The server owns NO audio — media flows directly between the browser and 3CX via WebRTC/RTP.
         var callDescriptor = new SIPCallDescriptor(
-            username:       null,
-            password:       null,
-            uri:            target,
-            from:           null,
-            to:             null,
-            routeSet:       null,
-            customHeaders:  null,
-            authUsername:   null,
-            callDirection:  SIPCallDirection.Out,
-            contentType:    SDP.SDP_MIME_CONTENTTYPE,
-            content:        null,
-            mangleIpAddress: false);
+            username:        null,
+            password:        null,
+            uri:             target,
+            from:            null,
+            to:              null,
+            routeSet:        null,
+            customHeaders:   null,
+            authUsername:    null,
+            callDirection:   SIPCallDirection.Out,
+            contentType:     "application/sdp",
+            content:         browserSdpOffer,
+            mangleIPAddress: null);
 
-        bool callResult = await ua.Call(callDescriptor, session);
+        // Pass null for the media session — the browser owns media entirely.
+        bool callResult = await ua.Call(callDescriptor, null);
 
         var callId  = ua.Dialogue?.CallId ?? Guid.NewGuid().ToString();
         var sipCall = new SipSorceryCall(
             ua, callId, target,
             _loggerFactory.CreateLogger<SipSorceryCall>());
 
+        // Extract 3CX's SDP answer to relay back to the browser.
+        var remoteSdp = ua.Dialogue?.RemoteSDP ?? string.Empty;
+
         if (callResult)
         {
-            await session.Start();
             sipCall.MarkConnected();
             _logger.LogInformation("Call connected. CallId={CallId}", callId);
         }
@@ -136,7 +134,7 @@ public sealed class SipSorceryClient : ISipClient
         _calls[callId] = sipCall;
         CallStateChanged?.Invoke(this, new(callId, sipCall.State, target));
 
-        return sipCall;
+        return new SipCallResult(sipCall, remoteSdp);
     }
 
     public Task AcceptCallAsync(string callId, CancellationToken ct = default)

@@ -1,4 +1,5 @@
 using Sip3CX.Abstractions;
+using SIPSorcery.SIP;
 using SIPSorcery.SIP.App;
 using Microsoft.Extensions.Logging;
 
@@ -31,39 +32,42 @@ internal sealed class SipSorceryCall : ISipCall
     public void MarkConnected() => State = SipCallState.Connected;
     public void MarkFailed()    => State = SipCallState.Failed;
 
-    public async Task HoldAsync(CancellationToken ct = default)
+    public Task HoldAsync(CancellationToken ct = default)
     {
         _logger.LogInformation("[{CallId}] Placing on hold.", CallId);
-        await _ua.PutOnHold();
+        _ua.PutOnHold();
         State = SipCallState.OnHold;
+        return Task.CompletedTask;
     }
 
-    public async Task ResumeAsync(CancellationToken ct = default)
+    public Task ResumeAsync(CancellationToken ct = default)
     {
         _logger.LogInformation("[{CallId}] Resuming from hold.", CallId);
-        await _ua.TakeOffHold();
+        _ua.TakeOffHold();
         State = SipCallState.Connected;
+        return Task.CompletedTask;
     }
 
-    public async Task HangUpAsync(CancellationToken ct = default)
+    public Task HangUpAsync(CancellationToken ct = default)
     {
         _logger.LogInformation("[{CallId}] Hanging up.", CallId);
         _ua.Hangup();
         State = SipCallState.Ended;
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public Task SendDtmfAsync(char digit, CancellationToken ct = default)
     {
         _logger.LogInformation("[{CallId}] Sending DTMF: {Digit}", CallId, digit);
-        // SIPSorcery supports DTMF via RTP or INFO
-        return _ua.SendDtmf((byte)(digit - '0'));
+        _ua.SendDtmf((byte)(digit - '0'));
+        return Task.CompletedTask;
     }
 
     public Task TransferAsync(string target, CancellationToken ct = default)
     {
         _logger.LogInformation("[{CallId}] Transferring to {Target}", CallId, target);
-        return _ua.BlindTransfer(target, TimeSpan.FromSeconds(5), ct);
+        var uri = SIPURI.ParseSIPURI(target);
+        return _ua.BlindTransfer(uri, TimeSpan.FromSeconds(5), ct);
     }
 
     public ValueTask DisposeAsync()

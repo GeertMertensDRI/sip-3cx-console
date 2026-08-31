@@ -1,0 +1,138 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "Sip3CX.Web/1.0.0": {
+        "dependencies": {
+          "Sip3CX": "1.0.0",
+          "Sip3CX.Abstractions": "1.0.0"
+        },
+        "runtime": {
+          "Sip3CX.Web.dll": {}
+        }
+      },
+      "DnsClient/1.7.0": {
+        "runtime": {
+          "lib/net6.0/DnsClient.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
+          }
+        }
+      },
+      "Portable.BouncyCastle/1.9.0": {
+        "runtime": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "assemblyVersion": "1.9.0.0",
+            "fileVersion": "1.9.0.1"
+          }
+        }
+      },
+      "SIPSorcery/6.2.4": {
+        "dependencies": {
+          "DnsClient": "1.7.0",
+          "Portable.BouncyCastle": "1.9.0",
+          "SIPSorcery.WebSocketSharp": "0.0.1",
+          "SIPSorceryMedia.Abstractions": "1.2.1"
+        },
+        "runtime": {
+          "lib/net8.0/SIPSorcery.dll": {
+            "assemblyVersion": "6.2.4.0",
+            "fileVersion": "6.2.4.0"
+          }
+        }
+      },
+      "SIPSorcery.WebSocketSharp/0.0.1": {
+        "runtime": {
+          "lib/netstandard2.0/websocket-sharp.dll": {
+            "assemblyVersion": "0.0.1.0",
+            "fileVersion": "0.0.1.0"
+          }
+        }
+      },
+      "SIPSorceryMedia.Abstractions/1.2.1": {
+        "runtime": {
+          "lib/net8.0/SIPSorceryMedia.Abstractions.dll": {
+            "assemblyVersion": "1.2.1.0",
+            "fileVersion": "1.2.1.0"
+          }
+        }
+      },
+      "Sip3CX/1.0.0": {
+        "dependencies": {
+          "SIPSorcery": "6.2.4",
+          "Sip3CX.Abstractions": "1.0.0"
+        },
+        "runtime": {
+          "Sip3CX.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Sip3CX.Abstractions/1.0.0": {
+        "runtime": {
+          "Sip3CX.Abstractions.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Sip3CX.Web/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DnsClient/1.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2hrXR83b5g6/ZMJOA36hXp4t56yb7G1mF3Hg6IkrHxvtyaoXRn2WVdgDPN3V8+GugOlUBbTWXgPaka4dXw1QIg==",
+      "path": "dnsclient/1.7.0",
+      "hashPath": "dnsclient.1.7.0.nupkg.sha512"
+    },
+    "Portable.BouncyCastle/1.9.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eZZBCABzVOek+id9Xy04HhmgykF0wZg9wpByzrWN7q8qEI0Qen9b7tfd7w8VA3dOeesumMG7C5ZPy0jk7PSRHw==",
+      "path": "portable.bouncycastle/1.9.0",
+      "hashPath": "portable.bouncycastle.1.9.0.nupkg.sha512"
+    },
+    "SIPSorcery/6.2.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kjKVeGssEWJBEXc298Zv1dlZ0GRf47Mt/kBuSxy7egYxrXqbK48q1/oBw/hdGKgdmKwLEzZ4R35vqY4a2mfG3g==",
+      "path": "sipsorcery/6.2.4",
+      "hashPath": "sipsorcery.6.2.4.nupkg.sha512"
+    },
+    "SIPSorcery.WebSocketSharp/0.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lBlR9rZmMty2v5kPzCseAyuSv95FSoGuYZJgDy6M/qqZ/xq1ejFnOVEpXMDqBIthiTUOH8rvMcpnva7HXK0ZVw==",
+      "path": "sipsorcery.websocketsharp/0.0.1",
+      "hashPath": "sipsorcery.websocketsharp.0.0.1.nupkg.sha512"
+    },
+    "SIPSorceryMedia.Abstractions/1.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6q111yMTOYHnDxpsskFgQfgcf1dk/jRZzPLi1RiialNW02/VWNaPSS1u5Sqz7E925zZCSFbg/tfTmX2A9NUihg==",
+      "path": "sipsorcerymedia.abstractions/1.2.1",
+      "hashPath": "sipsorcerymedia.abstractions.1.2.1.nupkg.sha512"
+    },
+    "Sip3CX/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sip3CX.Abstractions/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

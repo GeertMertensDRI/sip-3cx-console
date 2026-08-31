@@ -11,7 +11,7 @@ public interface ISipClient : IAsyncDisposable
     Task RegisterAsync(SipCredentials credentials, CancellationToken ct = default);
     Task UnregisterAsync(CancellationToken ct = default);
 
-    Task<ISipCall> PlaceCallAsync(string target, CancellationToken ct = default);
+    Task<SipCallResult> PlaceCallAsync(string target, string browserSdpOffer, CancellationToken ct = default);
     Task AcceptCallAsync(string callId, CancellationToken ct = default);
     Task HangUpAsync(string callId, CancellationToken ct = default);
 }
